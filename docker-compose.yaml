@@ -1,7 +1,7 @@
 version: '3.1' 
 services:
   spark-storage:
-    build: ./spark-staprage
+    build: ./spark-storage
     container_name: spark-storage
     volumes:
       - ./data/hadoop:/home/hadoop/mydata
@@ -9,9 +9,9 @@ services:
     build: ./spark
     container_name: spark-master
     ports:
-      - 8080:8080
       - 7077:7077
       - 18080:18080
+      - 2022:22
     environment:
       - SPARK_MODE=MASTER
   spark-worker:
