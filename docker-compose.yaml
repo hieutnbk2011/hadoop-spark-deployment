@@ -1,12 +1,10 @@
 version: '3.1' 
 services:
-  hadoop:
-    build: ./hadoop
-    container_name: hadoop
+  spark-storage:
+    build: ./spark-staprage
+    container_name: spark-storage
     volumes:
       - ./data/hadoop:/home/hadoop/mydata
-    env_file:
-      - ./hadoop.env
   spark-master:
     build: ./spark
     container_name: spark-master
@@ -14,8 +12,6 @@ services:
       - 8080:8080
       - 7077:7077
       - 18080:18080
-    env_file:
-      - ./hadoop.env
     environment:
       - SPARK_MODE=MASTER
   spark-worker:
@@ -27,6 +23,4 @@ services:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_WORKER_CORE=2
       - SPARK_WORKER_MEMORY=3G
-    env_file:
-      - ./hadoop.env
     scale: 3

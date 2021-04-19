@@ -11,7 +11,6 @@ ENV SPARK_HOME=/opt/spark
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
 ENV PYSPARK_PYTHON=/usr/bin/python3
-ENV CLASSPATH=$SPARK_HOME/jars
 RUN update-alternatives --install "/usr/sbin/start-master" "start-master" "/opt/spark/sbin/start-master.sh" 1
 RUN update-alternatives --install "/usr/sbin/start-worker" "start-worker" "/opt/spark/sbin/start-worker.sh" 1
 RUN update-alternatives --install "/usr/sbin/stop-worker" "stop-worker" "/opt/spark/sbin/stop-worker.sh" 1

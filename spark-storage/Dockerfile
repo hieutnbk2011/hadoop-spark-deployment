@@ -1,5 +1,5 @@
 FROM openjdk:11-jdk-buster
-RUN apt-get update && apt-get install -y openssh-server sudo wget supervisor
+RUN apt-get update && apt-get install -y openssh-server sudo wget
 
 #Install hadoop to user hadoop home directory 
 RUN useradd -m hadoop && echo "hadoop:supergroup" | chpasswd && adduser hadoop sudo && echo "hadoop     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
@@ -27,14 +27,6 @@ RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/
 COPY ssh_config /etc/ssh/ssh_config
 # Change back to user root
 USER root
-# Config supervisor
-COPY docker-files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Add the entrypoint script
 COPY docker-files/entrypoint.sh /
-
-# Volume you need to mount for persistence data
-#/home/hadoop/mydata
-
-EXPOSE 50070 50075 50010 50020 50090 8020 9000 9864 9870 10020 19888 8088 8030 8031 8032 8033 8040 8042 22
-
 ENTRYPOINT ["/entrypoint.sh"]
