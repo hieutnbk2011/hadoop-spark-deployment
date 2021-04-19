@@ -11,7 +11,7 @@ services:
     build: ./spark
     container_name: spark-master
     ports:
-      - 10080:8080
+      - 8080:8080
       - 7077:7077
       - 18080:18080
     env_file:
@@ -25,6 +25,8 @@ services:
     environment:
       - SPARK_MODE=WORKER
       - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKER_CORE=2
+      - SPARK_WORKER_MEMORY=3G
     env_file:
       - ./hadoop.env
-    scale: 1
+    scale: 3
