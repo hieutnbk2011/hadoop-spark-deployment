@@ -1,14 +1,22 @@
 #!/bin/bash
 
-sudo service ssh start
-
-if [ ! -d "/home/hadoop/mydata/hdfs/installed" ]; then
-        $HADOOP_HOME/bin/hdfs namenode -format
-	$HADOOP_HOME/bin/hadoop fs -mkdir /data
+service ssh start
+chown -R hadoop:hadoop /home/hadoop
+if [ ! -f "/home/hadoop/mydata/hdfs/installed" ]; then
+	runuser -u hadoop -- mkdir -p /home/hadoop/mydata/hdfs/namenode /home/hadoop/mydata/datanode
+	runuser -u hadoop -- $HADOOP_HOME/bin/hdfs namenode -format
 	touch /home/hadoop/mydata/hdfs/installed
 fi
 
-$HADOOP_HOME/sbin/start-dfs.sh
-$HADOOP_HOME/sbin/start-yarn.sh
+runuser -u hadoop -- $HADOOP_HOME/sbin/start-dfs.sh
+runuser -u hadoop -- $HADOOP_HOME/sbin/start-yarn.sh
+if runuser -u hadoop -- $HADOOP_HOME/bin/hadoop fs -ls /data &>/dev/null
+then
+  echo Data folder exists
+else 
+  echo Create data folder
+  runuser -u hadoop -- $HADOOP_HOME/bin/hadoop fs -mkdir /data
+fi
 
-/usr/bin/supervisord
+
+tail -f /home/hadoop/hadoop/logs/hadoop-hadoop-datanode*.log
