@@ -17,6 +17,9 @@ services:
       - 2022:22
     environment:
       - SPARK_MODE=MASTER
+      - SPARK_WORKER_CORE=2
+      - SPARK_WORKER_MEMORY=3G
+      - SPARK_DRIVER_MEMORY=2G
   spark-worker:
     build: ./spark
     depends_on:
