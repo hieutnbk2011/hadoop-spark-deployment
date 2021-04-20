@@ -1,6 +1,7 @@
 #!/bin/bash
 service ssh start
-printenv 
+printenv > ~/printenv.sh
+echo $SSH_PUBLIC_KEY >> ~/.ssh/authorized_keys
 case $SPARK_MODE in
   MASTER)
     start-master

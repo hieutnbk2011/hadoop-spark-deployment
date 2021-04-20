@@ -1,6 +1,6 @@
 FROM python:3.8-buster
 RUN apt-get update && apt-get install -y openssh-server openssh-client sudo wget openjdk-11-jre openjdk-11-jdk scala git procps rsync
-RUN pip3 install numpy pandas scikit-learn sklearn pyspark matplotlib
+RUN pip3 install numpy==1.16.1 pandas scikit-learn sklearn pyspark matplotlib
 #Setup SSH
 COPY ssh_config /etc/ssh/ssh_config
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && chmod 0600 ~/.ssh/authorized_keys
@@ -10,8 +10,9 @@ RUN wget --progress=bar:force:noscroll http://mirror.easyname.ch/apache/spark/sp
 ENV SPARK_HOME=/opt/spark
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ENV PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
-ENV PYSPARK_PYTHON=/usr/bin/python3
-RUN echo "PYSPARK_PYTHON=$PYSPARK_PYTHON" >> /opt/spark/conf/spark-env.sh
+ENV PYSPARK_PYTHON=/usr/local/bin/python3.8
+ENV PYTHONPATH=/usr/local/bin/python3.8:/usr/local/lib/python3.8/site-packages
+RUN echo "set -o allexport;. ~/printenv.sh &>/dev/null;cd" >> /root/.profile
 RUN update-alternatives --install "/usr/sbin/start-master" "start-master" "/opt/spark/sbin/start-master.sh" 1
 RUN update-alternatives --install "/usr/sbin/start-worker" "start-worker" "/opt/spark/sbin/start-worker.sh" 1
 RUN update-alternatives --install "/usr/sbin/stop-worker" "stop-worker" "/opt/spark/sbin/stop-worker.sh" 1

@@ -11,15 +11,16 @@ services:
     volumes:
       - ./scripts:/opt/spark/scripts
     ports:
-      - 8080:8080
+      - 10080:8080
       - 7077:7077
       - 18080:18080
-      - 2022:22
+      - "2022:22"
     environment:
+      - SSH_PUBLIC_KEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCjfFFdlQzqJQopHS2JIOHP3KzEsbDKAaLi1dSj1fF0gEBMeUG1xJJ6b1YyWNTAAbQdY895BMdcjLsbhMSWlz8K8OEvh/My6IjBGxLXsRQ6G9bFXDFt0RDhQzhz/o9Mv7acRoo7MLjhRFMJF7OVU8kp9vfw0pknGN7AHetFbSWhlxvN8pt48+7Ipdrv+9MQaSNWMI/xyIaWSoRNWYYM0jCUxTWYChmlb0dggvzESOov0btMKGioTkuya55B5i3tnxQ5vY+QkVMEZrPnjnSp2HdAMfFHFJDDa11tXlxZeqhl8wv2phepNXhydPUaamMGd/dXJVFg5wjwJcSaCu0/OUTnLPJd2ML1drCRsau7iPOdnb0QowpBC3O0dKpEWPEs7nF1ft24UOfXdt6xjNGzTQZ4W+cmdlbPgFtSGVSyzuEptMV6H0aQEVX08Fq9Qm2yYKKnjxnS+DbHQBPtSO6G209QHc761l+1hj80xm3uiaIT9vNjwJAJzCBnRJ4E1/TFzLE= root@ubuntu-s-1vcpu-2gb-intel-nyc1-01
       - SPARK_MODE=MASTER
-      - SPARK_WORKER_CORE=2
-      - SPARK_WORKER_MEMORY=3G
-      - SPARK_DRIVER_MEMORY=2G
+      - SPARK_WORKER_CORE=1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_DRIVER_MEMORY=1G
   spark-worker:
     build: ./spark
     depends_on:
@@ -27,6 +28,6 @@ services:
     environment:
       - SPARK_MODE=WORKER
       - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_WORKER_CORE=2
-      - SPARK_WORKER_MEMORY=3G
-    scale: 3
+      - SPARK_WORKER_CORE=1
+      - SPARK_WORKER_MEMORY=1G
+    scale: 1
