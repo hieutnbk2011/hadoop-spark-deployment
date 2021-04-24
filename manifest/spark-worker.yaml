@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-worker
+  labels:
+    lab: spark-worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      lab: spark-worker
+  template:
+    metadata:
+      labels:
+        lab: spark-worker
+    spec:
+      containers:
+        - name: spark-worker
+          image: "image-url"
+          imagePullPolicy: Always
+          env:
+          - name: SPARK_MODE
+            value: "WORKER"
+          - name: SPARK_MASTER
+            value: "spark://spark-master-svc:7077"
+          - name: SPARK_WORKER_CORE
+            value: 2
+          - name: SPARK_WORKER_MEMORY
+            value: "4G"
+

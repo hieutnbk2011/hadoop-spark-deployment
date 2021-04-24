@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+  labels:
+    lab: spark-master
+spec:
+  selector:
+    matchLabels:
+      lab: spark-master
+  template:
+    metadata:
+      labels:
+        lab: spark-master
+    spec:
+      containers:
+        - name: spark-master
+          image: "image-url"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: master-ui
+            - containerPort: 7077
+              name: master-port
+            - containerPort: 18080
+              name: history-ui
+          env:
+            - name: SPARK_MODE
+              value: "MASTER"
+            - name: SPARK_WORKER_CORE
+              value: 2
+            - name: SPARK_WORKER_MEMORY
+              value: "4G"
+            - name: SPARK_DRIVER_MEMORY
+              value: "4G"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-master-service
+  labels:
+    lab: spark-master
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: master-ui
+  - port: 7077
+    targetPort: 7077
+    name: master-port
+  - port: 18080
+    targetPort: 18080
+    name: history-ui
+  selector:
+    lab: spark-master
+
+

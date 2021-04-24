@@ -1,0 +1,64 @@
+#https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ebs-sc
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs-sc
+  resources:
+    requests:
+      storage: 400Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-storage
+  labels:
+    lab: spark-storage
+spec:
+  selector:
+    matchLabels:
+      lab: spark-storage
+  template:
+    metadata:
+      labels:
+        lab: spark-storage
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-claim
+      containers:
+        - name: spark-storage
+          image: "image-url"
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /home/hadoop/mydata
+              name: data
+          ports:
+            - containerPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-storage
+  labels:
+    lab: spark-storage
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+  selector:
+    lab: spark-storage
+
+
