@@ -1,5 +1,5 @@
-FROM python:3.8-buster
-RUN apt-get update && apt-get install -y openssh-server openssh-client sudo wget openjdk-11-jre openjdk-11-jdk scala git procps rsync
+FROM python:3.8-slim-buster
+RUN apt-get update && apt-get install -y openssh-server openssh-client sudo wget openjdk-11-jre openjdk-11-jdk scala git procps rsync vim
 RUN pip3 install numpy==1.16.1 pandas scikit-learn sklearn pyspark matplotlib
 #Setup SSH
 COPY ssh_config /etc/ssh/ssh_config

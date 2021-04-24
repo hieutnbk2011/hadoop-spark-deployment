@@ -1,7 +1,5 @@
-FROM openjdk:11-jdk-buster
-RUN apt-get update && apt-get install -y openssh-server sudo wget
-
-#Install hadoop to user hadoop home directory 
+FROM openjdk:11-jdk-slim-buster
+RUN apt-get update && apt-get install -y openssh-server sudo wget vim tar
 RUN useradd -m hadoop && echo "hadoop:supergroup" | chpasswd && adduser hadoop sudo && echo "hadoop     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
 WORKDIR /home/hadoop
 USER hadoop
